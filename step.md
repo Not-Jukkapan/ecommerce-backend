@@ -269,10 +269,49 @@ app.listen(PORT, () => {
 ```
 npm install bcrypt jsonwebtoken
 ```
-
+ลง Types ด้วย
 ```
 `npm i --save-dev @types/bcrypt`
 ```
+
+
+แก้ไข `authController` 
+- import prismaClient
+- destructuring req.body
+- checkUser is exist ?
+- if yes throw error
+- create users
+```ts
+import { Request, Response } from "express";
+import { prismaClient } from "..";
+import { hashSync } from 'bcrypt';
+
+export const signup = async (req: Request, res: Response) => {
+
+    const { email, password, name } = req.body;
+
+    // check user exists
+    let user = await prismaClient.user.findUnique({
+        where: { email }
+    });
+    if (user) {
+        throw new Error('User already exists');
+    }
+
+    user = await prismaClient.user.create({
+        data:
+        {
+            name,
+            email,
+            password: hashSync(password, 10)
+        }
+    })
+    res.json(user);
+}
+```
+
+จากนั้น แก้ไข authRoutes ให้สอดคล้องกับ `signup()`
+
 
 ---
 ### Step 9: Login and Generate JWT

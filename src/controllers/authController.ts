@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { prismaClient } from "..";
-import { hashSync, compareSync } from 'bcrypt';
+import { hashSync } from 'bcrypt';
 
 export const signup = async (req: Request, res: Response) => {
 
@@ -13,7 +13,7 @@ export const signup = async (req: Request, res: Response) => {
     if (user) {
         throw new Error('User already exists');
     }
-    
+
     user = await prismaClient.user.create({
         data:
         {
