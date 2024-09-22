@@ -190,6 +190,58 @@ PORT =somePortNumber
 
 เราจะมา defined `authRoutes` กัน ในที่นี้คือ `login` และ `signup` 
 
+สร้าง `routes/auth.ts` 
+ใช้ **Router class** สำหรับ split routes to other file
+```ts
+import {Router} from 'express'
+import {login} from '../controllers/auth'
+const authRoutes:Router =Router()
+
+authRoutes.get('/login', login)
+
+export default authRoutes
+```
+
+สร้าง Dummy controller มาใช้เพื่อ Callbacks `src/controller/authController.ts` และอย่าลืม Type ** Request, Response**
+```ts
+import {Request, Response} from 'express'
+export const login = (req, res) => {
+    res.send("Login Work!!")
+}
+```
+
+ในอนาคตจะมีการสร้าง Route เพิ่มเช่นสำหรับ **Products**, **Order** ดังนี้นเรา Combine Route เข้าด้วยกันเพิ่มความสะดวกโดย สร้าง `src/routes/index.ts`
+```ts
+import {Router} form 'express'
+import authRoutes from "./auth"
+
+const rootRouter:Router = Router()
+
+rootRouter.use('/auth',authRoutes)
+
+export default rootRouter
+```
+
+จากนั้น แก้ Route Call ทั้ `src/index.ts` 
+```ts
+
+import express, { Express, Request, Response } from 'express'
+import { PORT } from './secrets';
+import rootRouter from './routes';
+
+const app: Express = express();
+
+app.use('/api', rootRouter);
+
+app.listen(PORT, () => {
+    console.log(`server runnign at port ${PORT} Gamuuuu`)
+})
+
+```
+
+ทดสอบที่ `get /api/auth/login` ต้องแสดง `Login Work!!`
+
+
 ### Step 8: User Signup
 
 ### Step 9: Login and Generate JWT
