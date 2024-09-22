@@ -34,7 +34,7 @@ npm install @types/node --save-dev
 npm i express
 npm i @types/express --save-dev
 ```
-
+---
 ### Step 2 : Initialising Express App
 
 ท่ามาตรฐาน สำหรับ express
@@ -78,7 +78,7 @@ npm install ts-node nodemon --save-dev
     "start": "npx nodemon"
   },
 ```
-
+---
 ### Step 3 Directory structure: Creating folder strucutre of app
 
 ก่อนอื่น เนื่องจากเราใช้ ts เรา import type มาใช้ก่อน
@@ -99,7 +99,7 @@ app.listen(PORT, () => {
 ```
 
 และสร้าง folder `src/controllers`, `src/exceptions`, `src/middleware`, `src/routes` and `src/schema`
-
+---
 ### Step 4 : Initialising Prisma in Express app.
 
 ```
@@ -115,7 +115,7 @@ npx prisma init
 จะเห็น `root/prisma/schema.prisma` โดย default จะใช้ `progresql` โดยเราจะเปลี่ยนเป็ฯ `mysql`
 
 จากนั้นทำการสร้าง database และแก้ไข url ในส่วนของ .env file
-
+---
 ### Step 5 : Creating User model
 
 สร้าง model User ใน prisma.schema keep it simple ค่อยเพิ่มข้อมูลอื่นทีหลัง
@@ -137,6 +137,7 @@ model User{
 ```
 npx prisma migrate dev --name CreateUsersTable
 ```
+---
 
 ### Step 6 Setup Enviroments Variables.
 
@@ -185,7 +186,7 @@ app.listen(PORT, () => {
 ```
 PORT =somePortNumber
 ```
-
+---
 ### Step 7: Routes definitions
 
 เราจะมา defined `authRoutes` กัน ในที่นี้คือ `login` และ `signup` 
@@ -241,9 +242,39 @@ app.listen(PORT, () => {
 
 ทดสอบที่ `get /api/auth/login` ต้องแสดง `Login Work!!`
 
-
+---
 ### Step 8: User Signup
+จะมาทำ login auth กัน แต่ก่อนหน้านั้น เราต้องทำ prismaClient ก่อน ณ ที่นี้ ประกาศไว้หน้า `src/index.ts` ละกัน
 
+```ts
+import express, { Express, Request, Response } from 'express'
+import { PORT } from './secrets';
+import rootRouter from './routes';
+import { PrismaClient } from '@prisma/client';
+
+const app: Express = express();
+
+app.use('/api', rootRouter)
+
+export const prismaClient = new PrismaClient(
+    { log: ['query'] }
+);
+
+app.listen(PORT, () => {
+    console.log(`server runnign at port ${PORT} Gamuuuu`)
+})
+```
+
+จากนั้นไปที่ authControllers เราจะใช้ lib เพิ่ม 2 ตัว `bcrypt, jsonwebtoken`
+```
+npm install bcrypt jsonwebtoken
+```
+
+```
+`npm i --save-dev @types/bcrypt`
+```
+
+---
 ### Step 9: Login and Generate JWT
 
 ### Step 10: Advanced Error Handling
