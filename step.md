@@ -141,10 +141,54 @@ npx prisma migrate dev --name CreateUsersTable
 ### Step 6 Setup Enviroments Variables.
 
 ในอนาคต เราจะมีการใช้ JWT ซึ่งใช้ salt เราจะเก็บ หลายๆ parameter ไว้ที่นี่ และไม่ push ไป github
+ลง packeage เพื่อนเข้าถึงไฟล .env
+```
+npm install dotenv
+```
 
+จากนั้น สร้างไฟล์ `src/secrets.ts` 
+```ts
+import dotenv from  'dotenv'
 
+dotenv.config({
+    path:'.env'
+})
+
+export const PORT = process.env.PORT
+```
+
+in `.env` we add port 
+
+```
+PORT = 3000
+```
+
+ทดลองใช้งาน PORT ที่ `src/index.ts` 
+```ts
+import express, {Express, Request, Response} from 'express'
+import { PORT } from `./secrets`
+
+const app:Express = express();
+
+app.get('/', (req:Request, res:Response) => {
+    res.send("Hi Hi Hi")
+})
+
+app.listen(PORT, () => {
+    console.log(`server runnign at port ${PORT} Gamuuuu`)
+})
+```
+ทดสอบ `npm start` มันจะต้อง run ได้ปกติ ที่ `PORT 3000`
+
+สำหรับการใช้งานจริง เราจะสร้างไฟล์ตัวอย่างเช่น `.env.example` ไว้ และใส่รายละเอียด เช่น 
+
+```
+PORT =somePortNumber
+```
 
 ### Step 7: Routes definitions
+
+เราจะมา defined `authRoutes` กัน ในที่นี้คือ `login` และ `signup` 
 
 ### Step 8: User Signup
 

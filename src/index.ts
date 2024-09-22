@@ -1,9 +1,9 @@
-import express, {Express, Request, Response} from 'express'
+import express, { Express, Request, Response } from 'express'
+import { PORT } from './secrets';
 
-const app:Express = express();
-const PORT = 3000
+const app: Express = express();
 
-app.get('/', (req:Request, res:Response) => {
+app.get('/', (req: Request, res: Response) => {
     res.send("Hi Hi Hi")
 })
 
