@@ -1,5 +1,8 @@
 ## ฝึก Node TS Express Prisma จากคลิป indian guy
 
+All credits give to [@Evoqys](https://www.youtube.com/watch?v=qrSE1MCPvuU&list=PLaY6YJMqp51dW3zHhw0Iqy8hI86SKI8n-) from youtube
+Thanks for lifesaver!!
+
 ### Step 1 : Setup project
 
 ```
@@ -21,7 +24,7 @@ npx tsc --init
 ```
 
 จะได้ไฟล์ tsconfig.json ที่ hold configuration ต่างๆ สำหรับ TS ไว้
-
+****
 ถัดไป เนื่องจากเราใช้ TS ดังนั้น เราจะลง Types สำหรับ node ไว้ด้วย
 
 ```
@@ -315,6 +318,35 @@ export const signup = async (req: Request, res: Response) => {
 
 ---
 ### Step 9: Login and Generate JWT
+
+Idea จะคล้ายๆ กับก่อนหน้านี้ Copy มาก่อนเลย แล้วแก้ไขเงื่อนไขการเช็ค
+- ถ้าไม่มี user เรา Throw Error 
+- จากนั้น `import compareSync` มาใช้ Check req.password กับ hash password เราตรงกันไหม
+- ถ้าไม่ Throw new Error again
+- res JWT ไปใน object ด้วย ให้ **Client**
+- สร้าง JWT SECERT ไว้
+
+```ts
+import { Request, Response } from "express";
+import { prismaClient } from "..";
+import { hashSync, compareSync } from 'bcrypt';
+
+export const login = async (req: Request, res: Response) => {
+
+    const { email, password } = req.body;
+
+    // check user exists
+    let user = await prismaClient.user.findUnique({
+        where: { email }
+    });
+    if (!user) {
+        throw new Error('User does not exists');
+    }
+
+   if()
+    res.json(user);
+}
+```
 
 ### Step 10: Advanced Error Handling
 
